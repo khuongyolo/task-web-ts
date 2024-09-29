@@ -2,10 +2,10 @@
 </script>
 
 <template>
-  <header>
-    <p>Hello</p>
-  </header>
+  <div class="container">
+    <router-view></router-view>
+  </div>
 </template>
 
-<style scoped>
+<style>
 </style>
