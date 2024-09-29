@@ -101,35 +101,38 @@ onBeforeMount(() => {
         </Column>
       </DataTable>
     </div>
-    <div class="input-container flex flex-column gap-5 align-items-center">
-      <FloatLabel>
-        <div class="error-container flex gap-3">
-          <InputText v-model="title" />
-          <p class="text-sm text-red-500" v-if="displayMissingData.title">Title is required !</p>
-        </div>
-        <label for="username">Title</label>
-      </FloatLabel>
+    <div class="card p-7 border-round-xl bg-white w-20rem m-auto">
+      <div class="input-container flex flex-column gap-5 align-items-center">
+        <FloatLabel>
+          <div class="error-container flex gap-3">
+            <InputText v-model="title" />
+            <p class="text-sm text-red-500" v-if="displayMissingData.title">Title is required !</p>
+          </div>
+          <label for="username">Title</label>
+        </FloatLabel>
 
-      <FloatLabel>
-        <div class="error-container flex gap-3">
-          <InputText v-model="content" />
-          <p class="text-sm text-red-500" v-if="displayMissingData.content">
-            Content is required 1
-          </p>
-        </div>
-        <label for="username">Content</label>
-      </FloatLabel>
+        <FloatLabel>
+          <div class="error-container flex gap-3">
+            <InputText v-model="content" />
+            <p class="text-sm text-red-500" v-if="displayMissingData.content">
+              Content is required 1
+            </p>
+          </div>
+          <label for="username">Content</label>
+        </FloatLabel>
 
-      <FloatLabel>
-        <div class="error-container flex gap-3">
-          <InputText v-model="author" />
-          <p class="text-sm text-red-500" v-if="displayMissingData.author">Author is required !</p>
-        </div>
-        <label for="username">Author</label>
-      </FloatLabel>
+        <FloatLabel>
+          <div class="error-container flex gap-3">
+            <InputText v-model="author" />
+            <p class="text-sm text-red-500" v-if="displayMissingData.author">Author is required !</p>
+          </div>
+          <label for="username">Author</label>
+        </FloatLabel>
 
-      <Button label="Add Data" class="border-none bg-red-400" @click="PushData"></Button>
+        <Button label="Add Data" class="border-none bg-red-400" @click="PushData"></Button>
+      </div>
     </div>
+    <div class="h-7rem"></div>
   </div>
 </template>
 
