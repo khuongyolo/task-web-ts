@@ -6,7 +6,6 @@ import { ref } from 'vue';
 export const useDataTableStore = defineStore('data-table', () => {
 
   const posts = ref<GetDataAPIResponse[]>([]);
-
   const GetData = async () => {
     try {
       const { data } = await axios.get<{ data: GetDataAPIResponse[]}>("https://api.goro.fun/api/index");

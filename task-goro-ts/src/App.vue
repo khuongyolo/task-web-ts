@@ -7,5 +7,8 @@
   </div>
 </template>
 
-<style>
+<style lang="scss">
+body{
+  background-color: rgb(255, 237, 211);
+}
 </style>
