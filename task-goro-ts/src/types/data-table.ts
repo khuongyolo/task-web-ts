@@ -11,3 +11,5 @@ export type GetDataAPIEntry = Omit<GetDataAPIResponse, 'created_at' | 'updated_a
   created_at: Date;
   updated_at: Date;
 };
+
+export type GetDataByIdResponse = GetDataAPIResponse;

@@ -8,7 +8,7 @@ export const useDataTableStore = defineStore('data-table', () => {
   const GetData = async () => {
     try {
       const { data } = await axios.get<{ data: GetDataAPIResponse[] }>(
-        'https://api.goro.fun/api/index'
+        'https://api.goro.fun/api/index?'
       );
       posts.value = data.data;
     } catch (error) {

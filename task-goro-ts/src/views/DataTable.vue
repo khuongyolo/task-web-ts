@@ -5,6 +5,7 @@ import { useDataTableStore } from '../stores/data-table';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import type { GetDataAPIResponse } from '../types/data-table';
+import EditDataDialog from './EditDataDialog.vue';
 
 const toast = useToast();
 const store = useDataTableStore();
@@ -13,6 +14,15 @@ const title = ref('');
 const content = ref('');
 const author = ref('');
 
+const visible = ref();
+const openModal = (id: number) => {
+  router.push(`/edit/${id}`)
+};
+const closeModal = () => {
+  visible.value = false;
+};
+
+// handle delete datas from datatable
 const DeleteData = async (id: number): Promise<void> => {
   try {
     await axios.get(`https://api.goro.fun/api/delete/${id}`);
@@ -35,6 +45,7 @@ const DeleteData = async (id: number): Promise<void> => {
   }
 };
 
+// handle adding data into datatable
 const displayMissingData = ref<any>('');
 const PushData = async () => {
   displayMissingData.value = '';
@@ -84,22 +95,34 @@ onBeforeMount(() => {
   <div class="container">
     <Toast />
     <div class="p-8">
-      <DataTable :value="store.posts" paginator :rows="5" showGridlines tableStyle="height: 40rem">
+      <DataTable :value="store.posts" paginator :rows="10" showGridlines tableStyle="height: 40rem">
         <Column field="id" header="ID"></Column>
         <Column field="title" header="Title"></Column>
         <Column field="content" header="Content"></Column>
         <Column field="author" header="Author"></Column>
         <Column header="Delete">
-          <template #body="slotProps">
+          <template #body="{ data } : { data: GetDataAPIResponse }">
             <Button
               type="button"
               label="Delete"
               class="p-button-danger"
-              @click="DeleteData(slotProps.data.id)"
+              @click="DeleteData( data.id )"
+            >
+            </Button>
+          </template>
+        </Column>
+        <Column header="Edit">
+          <template #body="{ data } : { data: GetDataAPIResponse }">
+            <Button
+              type="button"
+              label="Edit"
+              class="p-button-success"
+              @click="openModal( data.id )"
             ></Button>
           </template>
         </Column>
       </DataTable>
+      
     </div>
     <div class="card p-7 border-round-xl bg-white w-20rem m-auto">
       <div class="input-container flex flex-column gap-5 align-items-center">
