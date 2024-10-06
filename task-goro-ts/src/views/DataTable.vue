@@ -5,7 +5,6 @@ import { useDataTableStore } from '../stores/data-table';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
 import type { GetDataAPIResponse } from '../types/data-table';
-import EditDataDialog from './EditDataDialog.vue';
 
 const toast = useToast();
 const store = useDataTableStore();
@@ -14,12 +13,8 @@ const title = ref('');
 const content = ref('');
 const author = ref('');
 
-const visible = ref();
 const openModal = (id: number) => {
-  router.push(`/edit/${id}`)
-};
-const closeModal = () => {
-  visible.value = false;
+  router.push(`/edit/${id}`);
 };
 
 // handle delete datas from datatable
@@ -101,28 +96,27 @@ onBeforeMount(() => {
         <Column field="content" header="Content"></Column>
         <Column field="author" header="Author"></Column>
         <Column header="Delete">
-          <template #body="{ data } : { data: GetDataAPIResponse }">
+          <template #body="{ data }: { data: GetDataAPIResponse }">
             <Button
               type="button"
               label="Delete"
               class="p-button-danger"
-              @click="DeleteData( data.id )"
+              @click="DeleteData(data.id)"
             >
             </Button>
           </template>
         </Column>
         <Column header="Edit">
-          <template #body="{ data } : { data: GetDataAPIResponse }">
+          <template #body="{ data }: { data: GetDataAPIResponse }">
             <Button
               type="button"
               label="Edit"
               class="p-button-success"
-              @click="openModal( data.id )"
+              @click="openModal(data.id)"
             ></Button>
           </template>
         </Column>
       </DataTable>
-      
     </div>
     <div class="card p-7 border-round-xl bg-white w-20rem m-auto">
       <div class="input-container flex flex-column gap-5 align-items-center">
@@ -147,7 +141,9 @@ onBeforeMount(() => {
         <FloatLabel>
           <div class="error-container flex gap-3">
             <InputText v-model="author" />
-            <p class="text-sm text-red-500" v-if="displayMissingData.author">Author is required !</p>
+            <p class="text-sm text-red-500" v-if="displayMissingData.author">
+              Author is required !
+            </p>
           </div>
           <label for="username">Author</label>
         </FloatLabel>
