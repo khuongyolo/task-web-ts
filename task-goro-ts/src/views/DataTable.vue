@@ -148,7 +148,7 @@ onBeforeMount(() => {
           <label for="username">Author</label>
         </FloatLabel>
 
-        <Button label="Add Data" class="border-none bg-red-400" @click="PushData"></Button>
+        <Button label="Add Data" class="border-none bg-green-500" @click="PushData"></Button>
       </div>
     </div>
     <div class="h-7rem"></div>

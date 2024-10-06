@@ -32,6 +32,10 @@ const getDataById = async () => {
   }
 };
 
+const disableButton = ref<boolean>(false);
+const backToHome = () => {
+  router.push('/');
+};
 const pushNewData = async () => {
   try {
     await axios.post<GetDataByIdResponse>('https://api.goro.fun/api/update', {
@@ -46,6 +50,7 @@ const pushNewData = async () => {
       detail: 'Data updated successfully',
       life: 2000
     });
+    disableButton.value = true;
 
     await store.GetData();
 
@@ -98,7 +103,16 @@ onBeforeMount(() => {
         </div>
       </div>
       <div class="w-full mt-7 flex flex-column align-items-center">
-        <Button label="Update Data" class="px-5" @click="pushNewData" />
+        <div class="flex gap-3 align-items-center">
+          <Button label="Update Data" class="px-5" @click="pushNewData" />
+          <Button
+            label="Back To Data Table"
+            v-if="disableButton"
+            outlined
+            class="px-5"
+            @click="backToHome"
+          />
+        </div>
       </div>
     </div>
   </div>
