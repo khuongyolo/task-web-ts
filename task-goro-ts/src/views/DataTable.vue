@@ -4,14 +4,19 @@ import { onBeforeMount, ref } from 'vue';
 import { useDataTableStore } from '../stores/data-table';
 import { useRouter } from 'vue-router';
 import { useToast } from 'primevue/usetoast';
-import type { GetDataAPIResponse } from '../types/data-table';
+import type { GetDataAPIEntry, GetDataAPIResponse } from '../types/data-table';
 
 const toast = useToast();
 const store = useDataTableStore();
 const router = useRouter();
-const title = ref('');
-const content = ref('');
-const author = ref('');
+const title = ref<string>('');
+const content = ref<string>('');
+const author = ref<string>('');
+
+const searchRequestTitle = ref<string>('');
+const searchRequestContent = ref<string>('');
+const searchRequestAuthor = ref<string>('');
+
 
 const openModal = (id: number) => {
   router.push(`/edit/${id}`);
@@ -22,7 +27,6 @@ const DeleteData = async (id: number): Promise<void> => {
   try {
     await axios.get(`https://api.goro.fun/api/delete/${id}`);
     await store.GetData();
-    router.push('/');
     toast.add({
       severity: 'success',
       summary: 'Delete',
@@ -81,6 +85,43 @@ const PushData = async () => {
   }
 };
 
+// handle query data
+const requestData = async () => {
+  try {
+    const response = await axios.post<{ data: GetDataAPIResponse[] }>('https://api.goro.fun/api/index', {
+      searchString:{
+        "title":  searchRequestTitle.value,
+        "content": searchRequestContent.value,
+        "author": searchRequestAuthor.value
+      }
+    });
+    
+    store.setSearchResults(response.data.data);
+
+    toast.add({
+      severity: 'success',
+      summary: 'Search',
+      detail: 'Search completed successfully',
+      life: 3000
+    });
+  } catch (error) {
+    console.error('Search error:', error);
+    toast.add({
+      severity: 'error',
+      summary: 'Error',
+      detail: 'Search failed',
+      life: 3000
+    });
+  }
+};
+
+const clearSearch = () => {
+  searchRequestTitle.value = '';
+  searchRequestContent.value = '';
+  searchRequestAuthor.value = '';
+  store.clearSearch();
+};
+
 onBeforeMount(() => {
   store.GetData();
 });
@@ -90,6 +131,23 @@ onBeforeMount(() => {
   <div class="container">
     <Toast />
     <div class="p-8">
+      <div class="search-container flex gap-3 justify-content-center align-items-center mb-6">
+        <IconField iconPosition="left">
+            <InputIcon class="pi pi-search"> </InputIcon>
+            <InputText v-model="searchRequestTitle" placeholder="Search on title" />
+        </IconField>
+        <IconField iconPosition="left">
+            <InputIcon class="pi pi-search"> </InputIcon>
+            <InputText v-model="searchRequestContent" placeholder="Search on content" />
+        </IconField>
+        <IconField iconPosition="left">
+            <InputIcon class="pi pi-search"> </InputIcon>
+            <InputText v-model="searchRequestAuthor" placeholder="Search on author" />
+        </IconField>
+        <Button label="Search" @click="requestData"></Button>
+        <Button v-if="store.isSearchActive" label="Clear Search" @click="clearSearch"></Button>
+
+      </div>
       <DataTable :value="store.posts" paginator :rows="10" showGridlines tableStyle="height: 40rem">
         <Column field="id" header="ID"></Column>
         <Column field="title" header="Title"></Column>
@@ -155,4 +213,8 @@ onBeforeMount(() => {
   </div>
 </template>
 
-<style scoped lang="scss"></style>
+<style scoped lang="scss">
+::placeholder{
+  opacity: .4;
+}
+</style>
